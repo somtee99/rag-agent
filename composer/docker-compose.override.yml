@@ -1,0 +1,55 @@
+
+
+services:
+
+  # During development we want to build our Docker image from relevant
+  # Dockerfiles, as opposed to pulling it from a repository somewhere.
+
+  lab:
+    build:
+      context: ..
+      dockerfile: composer/Dockerfile
+
+  assessment:
+    ports:
+      - $DEV_ASSESSMENT_PORT:8080
+
+  nginx:
+    ports:
+      - $DEV_NGINX_PORT:80
+
+  docker_router:
+    build: 
+      context: ../docker_router
+      dockerfile: Dockerfile
+
+  llm_client:
+    build: 
+      context: ../llm_client
+      dockerfile: Dockerfile_client
+    env_file:
+      - .env-dev  ## pass in your environment variable (i.e. NVIDIA_API_KEY)
+
+  frontend:
+    build: 
+      context: ../frontend
+      dockerfile: Dockerfile
+
+  frontend_rproxy:
+    build: 
+      context: ../frontend
+      dockerfile: Dockerfile
+
+  chatbot:
+    build: 
+      context: ../chatbot
+      dockerfile: Dockerfile
+    env_file:
+      - .env-dev  ## pass in your environment variable (i.e. NVIDIA_API_KEY)
+
+  chatbot_rproxy:
+    build: 
+      context: ../chatbot
+      dockerfile: Dockerfile
+    env_file:
+      - .env-dev  ## pass in your environment variable (i.e. NVIDIA_API_KEY)
